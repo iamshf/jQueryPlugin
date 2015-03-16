@@ -1,2 +1,2 @@
 # jQueryPlugin
-some useful jQuery plugin
+some useful jQuery plugin,you can see all the demo on index.html
