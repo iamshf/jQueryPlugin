@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content="jQuery,plugin,插件,web,前端,拖动,drag" />
+    <meta name="author" content="盛浩锋" />
+    <title>jQuery拖动控件示例</title>
+</head>
+<body>
+<h2>jQuery拖动插件示例</h2>
+<p>点击下方红块就可以拖动</p>
+<div id="DragObj" style="width:40px;height:40px;background-color:Black;"><div id="DragDemo" style="width:30px;height:30px;background-color:Red;"></div></div>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="dragBySHF.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#DragDemo").dragBySHF({
+            objDrag: $("#DragObj"), //要拖动的对象
+            isLockX: false, //是否锁定横向拖动
+            isLockY: false, //是否锁定纵向拖动
+            isLimit: false, //是否限制，如果为True时，则下面四个参数起效
+            minLeft: 0,
+            maxLeft: 9999,
+            minTop: 0,
+            maxTop: 9999,
+            funStart: function () { }, //开始拖动时执行的方法
+            funDraging: function () { }, //拖动时执行的方法
+            funStop: function () { } //停止拖动时的方法
+        });
+    });
+</script>
+</body>
+</html>
