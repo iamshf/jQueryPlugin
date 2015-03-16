@@ -1,10 +1,82 @@
 ﻿/*!
-*dragBySHF v1.0.0
-*Author:盛浩锋
-*Date:2014-04-15
-*http://www.cnblogs.com/iamshf
+ *DragBySHF v1.1.1
+ *Author:盛浩峰
+ *Date:2014-05-12
+ *http://www.cnblogs.com/iamshf
+ *http://wonder-world.appspot.com
+ *修复bug
 */
-; (function ($, window, document, undefined) {
+;
+(function ($, window, document, undefined) {
+    //#region 拖动公共方法
+    function onDragStart(e) {
+        ///<summary>
+        ///开始拖动
+        ///</summary>
+        ///<param name="e" type="Event">事件对象</param>
+        var iClientX = e.clientX;
+        var iClientY = e.clientY;
+        $(document).bind("mousemove",{
+            iInitLeft:e.data.iInitLeft,
+            iInitTop:e.data.iInitTop,
+            iStartPosX: iClientX,
+            iStartPosY: iClientY,
+            iInitPosX: parseInt(e.data.objOptions.objDrag.css("left").replace("px", "")),
+            iInitPosY: parseInt(e.data.objOptions.objDrag.css("top").replace("px", "")),
+            objOptions:e.data.objOptions
+        }, onDraging).bind("mouseup",{objOptions:e.data.objOptions} ,onDragStop);
+        e.data.objOptions.funStart(e.data.objOptions);
+    }
+    function onDraging(e) {
+        ///<summary>
+        ///正在拖动
+        ///</summary>
+        ///<param name="e" type="object">事件对象</param>
+        var iOffsetX = parseInt(e.clientX) - parseInt(e.data.iStartPosX) + e.data.iInitPosX;
+        var iOffsetY = parseInt(e.clientY) - parseInt(e.data.iStartPosY) + e.data.iInitPosY;
+        if (e.data.objOptions.isLimit) {
+            if (!e.data.objOptions.isLockX) {
+                var iTotalOffsetX = iOffsetX - e.data.iInitLeft;
+                if (iTotalOffsetX <= e.data.objOptions.minLeft) {
+                    iOffsetX=e.data.iInitLeft+e.data.objOptions.minLeft;
+                }
+                else if (iTotalOffsetX >= e.data.objOptions.maxLeft) {
+                    iOffsetX=e.data.iInitLeft + e.data.objOptions.maxLeft;
+                }
+                setPositionX(e.data.objOptions,iOffsetX);
+            }
+            if (!e.data.objOptions.isLockY) {
+                var iTotalOffsetY = iOffsetY - e.data.iInitTop;
+                if (iTotalOffsetY <= e.data.objOptions.minTop) {
+                    iOffsetY=e.data.iInitTop+e.data.objOptions.minTop;
+                }
+                else if (iTotalOffsetY >= e.data.objOptions.maxTop) {
+                    iOffsetY=e.data.iInitTop + e.data.objOptions.maxTop;
+                }
+                setPositionY(e.data.objOptions,iOffsetY);
+            }
+        }
+        else {
+            setPositionX(e.data.objOptions,iOffsetX);
+            setPositionY(e.data.objOptions,iOffsetY);
+        }
+        e.data.objOptions.funDraging(iOffsetX,iOffsetY,e.data.objOptions);
+    }
+    function setPositionX(objOptions,iPosX) {
+        if (!objOptions.isLockX) { objOptions.objDrag.css("left", iPosX + "px"); }
+    }
+    function setPositionY(objOptions,iPosY) {
+        if (!objOptions.isLockY) { objOptions.objDrag.css("top", iPosY + "px"); }
+    }
+    function onDragStop(e) {
+        ///<summary>
+        ///停止拖动
+        ///</summary>
+        $(document).unbind("mousemove", onDraging).unbind("mouseup", onDragStop);
+        e.data.objOptions.funStop(e.data.objOptions);
+    }
+    //#endregion
+    //#region 扩展JQuery插件
     $.fn.extend({
         dragBySHF: function (objSettings) {
             var objSettingsDefault = {
@@ -20,103 +92,25 @@
                 funDraging: function () { }, //拖动时执行的方法
                 funStop: function () { } //停止拖动时的方法
             };
-            var objDrag; //拖动的对象
-            var iInitLeft = null; //滑动对象的初始位置
-            var iInitTop = null; //滑动对象的初始位置
             return this.each(function () {
-                $.extend(objSettingsDefault, objSettings);
-                objDrag = objSettingsDefault.objDrag == null ? $(this) : objSettingsDefault.objDrag;
-                $(this).mousedown(function (e) {
-                    if (!objDrag.css("position") || objDrag.css("position") == "static") {
-                        objDrag.css({
-                            "position": "relative",
-                            "left": "0px",
-                            "top": "0px"
-                        });
-                    }
-                    OnDragStart(e);
-                }).mouseup(function () {
-                    OnDragStop();
-                })
+                var objOptions = $.extend({},objSettingsDefault, objSettings);
+                objOptions.objDrag = objOptions.objDrag == null ? $(this) : objOptions.objDrag;
+                if (!objOptions.objDrag.css("position") || objOptions.objDrag.css("position") == "static") {
+                    objOptions.objDrag.css({
+                        "position": "relative",
+                        "left": "0px",
+                        "top": "0px"
+                    });
+                }
+                var iInitLeft = objOptions.objDrag.css("left")?parseInt(objOptions.objDrag.css("left")):0;
+                var iInitTop = objOptions.objDrag.css("top")?parseInt(objOptions.objDrag.css("top")):0;
+                $(this).bind("mousedown",{
+                    objOptions:objOptions,
+                    iInitLeft:iInitLeft,
+                    iInitTop:iInitTop
+                },onDragStart).bind("mouseup",{objOptions:objOptions},onDragStop);
             });
-            function OnDragStart(e) {
-                ///<summary>
-                ///开始拖动
-                ///</summary>
-                ///<param name="e" type="object">事件对象</param>
-                var iClientX = e.clientX;
-                var iClientY = e.clientY;
-                if (iInitLeft == null) {
-                    iInitLeft = parseInt(objDrag.css("left").replace("px", ""));
-                    iInitLeft = isNaN(iInitLeft) ? 0 : iInitLeft;
-                }
-                if (iInitTop == null) {
-                    iInitTop = parseInt(objDrag.css("top").replace("px", ""));
-                    iInitTop = isNaN(iInitTop) ? 0 : iInitTop;
-                }
-
-                $(document).bind("mousemove",
-                    {
-                        iStartPosX: iClientX,
-                        iStartPosY: iClientY,
-                        iInitPosX: parseInt(objDrag.css("left").replace("px", "")),
-                        iInitPosY: parseInt(objDrag.css("top").replace("px", ""))
-                    }, OnDraging).bind("mouseup", OnDragStop);
-
-                objSettingsDefault.funStart();
-            }
-            function OnDraging(e) {
-                ///<summary>
-                ///正在拖动
-                ///</summary>
-                ///<param name="e" type="object">事件对象</param>
-                var iOffsetX = parseInt(e.clientX) - parseInt(e.data.iStartPosX) + e.data.iInitPosX;
-                var iOffsetY = parseInt(e.clientY) - parseInt(e.data.iStartPosY) + e.data.iInitPosY;
-                if (objSettingsDefault.isLimit) {
-                    var iTotalOffsetY = iOffsetY - iInitTop;
-                    if (!objSettingsDefault.isLockX) {
-                        var iTotalOffsetX = iOffsetX - iInitLeft;
-                        if (iTotalOffsetX <= objSettingsDefault.minLeft) {
-                            SetPositionX(iInitLeft + objSettingsDefault.minLeft);
-                        }
-                        else if (iTotalOffsetX >= objSettingsDefault.maxLeft) {
-                            SetPositionX(iInitLeft + objSettingsDefault.maxLeft);
-                        }
-                        else {
-                            SetPositionX(iOffsetX);
-                        }
-                    }
-                    if (!objSettingsDefault.isLockY) {
-                        if (iTotalOffsetY <= objSettingsDefault.minTop) {
-                            SetPositionY(iInitTop + objSettingsDefault.minTop);
-                        }
-                        else if (iTotalOffsetY >= objSettingsDefault.maxTop) {
-                            SetPositionY(iInitTop + objSettingsDefault.maxTop);
-                        }
-                        else {
-                            SetPositionY(iOffsetY);
-                        }
-                    }
-                }
-                else {
-                    SetPositionX(iOffsetX);
-                    SetPositionY(iOffsetY);
-                }
-                objSettingsDefault.funDraging();
-            }
-            function SetPositionX(iPosX) {
-                if (!objSettingsDefault.isLockX) { objDrag.css("left", iPosX + "px"); }
-            }
-            function SetPositionY(iPosY) {
-                if (!objSettingsDefault.isLockY) { objDrag.css("top", iPosY + "px"); }
-            }
-            function OnDragStop() {
-                ///<summary>
-                ///停止拖动
-                ///</summary>
-                $(document).unbind("mousemove", OnDraging).unbind("mouseup", OnDragStop);
-                objSettingsDefault.funStop();
-            }
         }
     });
-})(jQuery, window, document);
+    //#endregion
+}(jQuery, window, document,undefined));
