@@ -1,13 +1,16 @@
 ﻿/**
-* DialogBySHF Library v1.0.0
+* DialogBySHF Library v1.0.1
 * http://cnblogs.com/iamshf
 *
 * author:盛浩峰
-* Date: 2013-06-14
+* Date: 2014-12-01
+* 修复与播放器插件不兼容的Bug
+* 使用前需先引用拖动插件：../drag/dragBySHF.min.js
 */
 
 /*添加样式，在IE9.0一下版本中需要单独引用，此处引用无效*/
-var STYLEPATH = "http://resource.en100.com.cn/Javascript/DialogBySHF/DialogBySHF.css";
+;
+var STYLEPATH = "dialogBySHF.css";
 $("<link>")
     .attr({ rel: "stylesheet",
         type: "text/css",
@@ -16,32 +19,32 @@ $("<link>")
 (function ($) {
     //默认参数
     var PARAMS;
-    var DEFAULTPARAMS = { 
-        Title: "Windows弹出消息", 
-        Content: "", 
-        Width: 400, 
-        Height: 300, 
-        URL: "", 
-        ConfirmText:"确定",
+    var DEFAULTPARAMS = {
+        Title: "Windows弹出消息",
+        Content: "",
+        Width: 400,
+        Height: 300,
+        URL: "",
+        ConfirmText: "确定",
         ConfirmFun: new Object,
-        CancelText:"取消", 
+        CancelText: "取消",
         CancelFun: new Object,
-        CloseFun:new Object
+        CloseFun: new Object
     };
     var ContentWidth = 0;
     var ContentHeight = 0;
     $.DialogBySHF = {
         //弹出提示框
-        Alert: function (params) {Show(params, "Alert");},
+        Alert: function (params) { Show(params, "Alert"); },
         //弹出确认框
         Confirm: function (params) { Show(params, "Confirm"); },
         //弹出引用其他URL框
         Dialog: function (params) { Show(params, "Dialog"); },
         //仅显示提示，不所有显示按钮
-        ShowTip:function(params){Show(params,"ShowTip");},
+        ShowTip: function (params) { Show(params, "ShowTip"); },
         //关闭弹出框
         Close: function () {
-            if($.isFunction(PARAMS.CloseFun)){
+            if ($.isFunction(PARAMS.CloseFun)) {
                 PARAMS.CloseFun();
             }
             $("#DialogBySHFLayer,#DialogBySHF").remove();
@@ -65,7 +68,7 @@ $("<link>")
         positionTop = positionTop < 0 ? 0 : positionTop;
 
         $("#DialogBySHFLayer").css({ width: screenWidth, height: screenHeight, top: $(window).scrollTop() });
-        $("#DialogBySHF").css({ left:positionLeft, top: positionTop });
+        $("#DialogBySHF").css({ left: positionLeft, top: positionTop });
     };
 
     //显示弹出框
@@ -85,11 +88,11 @@ $("<link>")
             Content.push("            <tr><td id=\"TipLine\" style=\"height:" + TipLineHeight + "px;\">" + PARAMS.Content + "</td></tr>");
             Content.push("            <tr>");
             Content.push("                <td id=\"BtnLine\">");
-            if(caller!="ShowTip"){
-                Content.push("                    <input type=\"button\" id=\"btnDialogBySHFConfirm\" value=\""+PARAMS.ConfirmText+"\" />");
+            if (caller != "ShowTip") {
+                Content.push("                    <input type=\"button\" id=\"btnDialogBySHFConfirm\" value=\"" + PARAMS.ConfirmText + "\" />");
             }
             if (caller == "Confirm") {
-                Content.push("                    <input type=\"button\" id=\"btnDialogBySHFCancel\" value=\""+PARAMS.CancelText+"\" />");
+                Content.push("                    <input type=\"button\" id=\"btnDialogBySHFCancel\" value=\"" + PARAMS.CancelText + "\" />");
             }
             Content.push("                </td>");
             Content.push("            </tr>");
@@ -112,7 +115,7 @@ $("<link>")
         })
 
         $("#DialogBySHF #Close").click(function () { $.DialogBySHF.Close(); });
-        $("#DialogBySHF #Title").DragBySHF($("#DialogBySHF"));
+        $("#DialogBySHF #Title").dragBySHF({ objDrag: $("#DialogBySHF") });
         if (caller != "Dialog") {
             $("#DialogBySHF #btnDialogBySHFConfirm").click(function () {
                 if ($.isFunction(PARAMS.ConfirmFun)) {
@@ -132,50 +135,4 @@ $("<link>")
             })
         }
     }
-})(jQuery);
-
-//拖动层
-(function ($) {
-    $.fn.extend({
-        DragBySHF: function (objMoved) {
-            return this.each(function () {
-                //鼠标按下时的位置
-                var mouseDownPosiX;
-                var mouseDownPosiY;
-                //移动的对象的初始位置
-                var objPosiX;
-                var objPosiY;
-                //移动的对象
-                var obj = $(objMoved) == undefined ? $(this) : $(objMoved);
-                //是否处于移动状态
-                var status = false;
-
-                //鼠标移动时计算移动的位置
-                var tempX;
-                var tempY;
-
-                $(this).mousedown(function (e) {
-                    status = true;
-                    mouseDownPosiX = e.pageX;
-                    mouseDownPosiY = e.pageY;
-
-                    objPosiX = obj.css("left").replace("px", "");
-                    objPosiY = obj.css("top").replace("px", "");
-                }).mouseup(function () {
-                    status = false;
-                });
-                $("body").mousemove(function (e) {
-                    if (status) {
-                        tempX = parseInt(e.pageX) - parseInt(mouseDownPosiX) + parseInt(objPosiX);
-                        tempY = parseInt(e.pageY) - parseInt(mouseDownPosiY) + parseInt(objPosiY);
-                        obj.css({ "left": tempX + "px", "top": tempY + "px" });
-                    }
-                }).mouseup(function () {
-                    status = false;
-                }).mouseleave(function () {
-                    status = false;
-                });
-            });
-        }
-    })
 })(jQuery);
