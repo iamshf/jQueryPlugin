@@ -10,13 +10,13 @@
 
 /*添加样式，在IE9.0一下版本中需要单独引用，此处引用无效*/
 ;
-var STYLEPATH = "dialogBySHF.css";
-$("<link>")
-    .attr({ rel: "stylesheet",
-        type: "text/css",
-        href: STYLEPATH
-    }).appendTo("head");
 (function ($) {
+    var STYLEPATH = "dialogBySHF.css";
+    $("<link>")
+        .attr({ rel: "stylesheet",
+            type: "text/css",
+            href: STYLEPATH
+        }).appendTo("head");
     //默认参数
     var PARAMS;
     var DEFAULTPARAMS = {
