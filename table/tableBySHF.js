@@ -1,4 +1,13 @@
-﻿(function ($, window, undefined) {
+﻿/*!
+*tableBySHF v1.0.1
+*Author:盛浩峰
+*Date:2015-03-24
+*http://www.cnblogs.com/iamshf
+*http://wonder-world.appspot.com
+*增加版本号信息
+*/
+;
+(function ($, window, undefined) {
     $.fn.extend({
         fixHead: function (params) {
             var defaultParams = { Height: 400, BorderWidth: 1 };
