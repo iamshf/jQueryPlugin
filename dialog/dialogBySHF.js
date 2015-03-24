@@ -112,7 +112,7 @@
             SetStyle();
         }).scroll(function () {
             SetStyle();
-        })
+        });
 
         $("#DialogBySHF #Close").click(function () { $.DialogBySHF.Close(); });
         $("#DialogBySHF #Title").dragBySHF({ objDrag: $("#DialogBySHF") });
@@ -123,7 +123,7 @@
                     PARAMS.ConfirmFun();
                 }
                 $.DialogBySHF.Close();
-            })
+            });
         }
         if (caller == "Confirm") {
             $("#DialogBySHF #btnDialogBySHFCancel").click(function () {
@@ -132,7 +132,7 @@
                     PARAMS.CancelFun();
                 }
                 $.DialogBySHF.Close();
-            })
+            });
         }
     }
 })(jQuery);

@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content="jQuery,plugin,插件,web,前端,表格,table" />
+    <meta name="author" content="盛浩锋" />
+    <title>jQuery表格控件示例</title>
+</head>
+<body>
+    <a href="../index.html">返回</a>
+    <table id="tab" style="width:300px;">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>张三</td>
+                <td>2015-03-15</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>李四</td>
+                <td>2015-02-19</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>王五</td>
+                <td>2015-03-30</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>小明</td>
+                <td>2015-04-19</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>找刘</td>
+                <td>2015-03-05</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>李四</td>
+                <td>2015-02-19</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>李四</td>
+                <td>2015-02-19</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>王五</td>
+                <td>2015-03-30</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>李四</td>
+                <td>2015-02-19</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>王五</td>
+                <td>2015-03-30</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>李四</td>
+                <td>2015-02-19</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>王五</td>
+                <td>2015-03-30</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>找刘</td>
+                <td>2015-03-05</td>
+            </tr>
+        </tbody>
+    </table>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="tableBySHF.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#tab").fixHead({"Height":200}).sort({ "isSortAll": 1, "sortSettings": [{ "index": 0, "type": 1}] });
+        });
+    </script>
+</body>
+</html>
