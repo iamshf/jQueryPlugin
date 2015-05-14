@@ -36,22 +36,28 @@
         var iOffsetY = parseInt(e.clientY) - parseInt(e.data.iStartPosY) + e.data.iInitPosY;
         if (e.data.objOptions.isLimit) {
             if (!e.data.objOptions.isLockX) {
+            	var minLeft = $.isFunction(e.data.objOptions.minLeft) ? e.data.objOptions.minLeft() : e.data.objOptions.minLeft;
+            	var maxLeft = $.isFunction(e.data.objOptions.maxLeft) ? e.data.objOptions.maxLeft() : e.data.objOptions.maxLeft;
+            	
                 var iTotalOffsetX = iOffsetX - e.data.iInitLeft;
-                if (iTotalOffsetX <= e.data.objOptions.minLeft) {
-                    iOffsetX=e.data.iInitLeft+e.data.objOptions.minLeft;
+                if (iTotalOffsetX <= minLeft) {
+                    iOffsetX=e.data.iInitLeft+minLeft;
                 }
-                else if (iTotalOffsetX >= e.data.objOptions.maxLeft) {
-                    iOffsetX=e.data.iInitLeft + e.data.objOptions.maxLeft;
+                else if (iTotalOffsetX >= maxLeft) {
+                    iOffsetX=e.data.iInitLeft + maxLeft;
                 }
                 setPositionX(e.data.objOptions,iOffsetX);
             }
             if (!e.data.objOptions.isLockY) {
+            	var minTop = $.isFunction(e.data.objOptions.minTop) ? e.data.objOptions.minTop() : e.data.objOptions.minTop;
+            	var maxTop = $.isFunction(e.data.objOptions.maxTop) ? e.data.objOptions.maxTop() : e.data.objOptions.maxTop;
+
                 var iTotalOffsetY = iOffsetY - e.data.iInitTop;
-                if (iTotalOffsetY <= e.data.objOptions.minTop) {
-                    iOffsetY=e.data.iInitTop+e.data.objOptions.minTop;
+                if (iTotalOffsetY <= minTop) {
+                    iOffsetY=e.data.iInitTop + minTop;
                 }
-                else if (iTotalOffsetY >= e.data.objOptions.maxTop) {
-                    iOffsetY=e.data.iInitTop + e.data.objOptions.maxTop;
+                else if (iTotalOffsetY >= maxTop) {
+                    iOffsetY=e.data.iInitTop + maxTop;
                 }
                 setPositionY(e.data.objOptions,iOffsetY);
             }
