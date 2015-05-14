@@ -79,6 +79,7 @@
     //#region 扩展JQuery插件
     $.fn.extend({
         dragBySHF: function (objSettings) {
+        	$(this).dragBySHFUnbind();
             var objSettingsDefault = {
                 objDrag: null, //要拖动的对象
                 isLockX: false, //是否锁定横向拖动
@@ -110,7 +111,12 @@
                     iInitTop:iInitTop
                 },onDragStart).bind("mouseup",{objOptions:objOptions},onDragStop);
             });
-        }
+        },
+	    dragBySHFUnbind:function(){
+	    	return this.each(function(){
+	    		$(this).unbind("mousedown",onDragStart).unbind("mouseup",onDragStop);
+	    	});
+	    }
     });
     //#endregion
 }(jQuery, window, document,undefined));
