@@ -8,6 +8,5 @@
 
     <Grid x:Name="LayoutRoot" Background="Black">
         <MediaElement HorizontalAlignment="Stretch" Name="myPlayer" Margin="0,0,0,0" Stretch="UniformToFill" VerticalAlignment="Stretch"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Name="text1" Margin="140,128,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </UserControl>

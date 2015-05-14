@@ -6,10 +6,10 @@
     <link rel="stylesheet" type="text/css" href="theme/default/MediaPlayerBySHF.css" />
 </head>
 <body>
-    <div id="playerContainer" style="width:500px;height:400px;"></div>
+    <div id="testEvent">asdfasdf</div>
+    <div id="playerContainer" style=""></div>
 
-    <div id="testEvent"></div>
-    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.0.min.js"></script>
     <!--<script type="text/javascript" src="MediaPlayerBySHF.js"></script>-->
     <script type="text/javascript" src="../../drag/dragBySHF.js"></script>
     <script type="text/javascript" src="Silverlight.js"></script>
@@ -50,32 +50,66 @@
         }
     </script>
     <script type="text/javascript">
-        function loadMediaContent(options) {
+        function initPlayer(options) {
+            loadPlayerContent(options);
+            $("#MediaBySHFContainer" + options.playerId).css({
+                "width": options.width + "px", "height": options.height + $("#MediaControllerContainer" + options.playerId).height() + 10 + "px"
+            });
+            $("#MediaPlayerContainer" + options.playerId).css({ "width": options.width + "px", "height": options.height + "px", "margin": "0 auto" });
+
+            $("#ProcessBar" + options.playerId).css({
+                "width": (options.width * 0.8) - $("#MediaControllerLeft" + options.playerId).width() - $("#MediaControllerRight" + options.playerId).width() - $("#ProcessBarContainer" + options.playerId).width()
+            });
+            $("#ProcessBarSliderContainer" + options.playerId).css({
+                "width": $("#ProcessBarContainer" + options.playerId).width() - (parseFloat($("#ProcessBarSliderContainer" + options.playerId).css("left")) * 2) - $("#ProcessSlider" + options.playerId).width()
+            });
+        }
+
+        function loadPlayerContent(options) {
             var htmlMedia = "<div class=\"MediaBySHFContainer\" id=\"MediaBySHFContainer" + options.playerId + "\">";
-            //<!--播放器组件(Silverlight Or Html5(audio,video))容器-->
+            //播放器组件(Silverlight Or Html5(audio,video))容器
             htmlMedia += "<div class=\"MediaPlayerContainer\" id=\"MediaPlayerContainer" + options.playerId + "\"></div>";
-            //<!--播放器控制部分-->
+
+            //播放器控制部分
             htmlMedia += "<div class=\"MediaControllerContainer\" id=\"MediaControllerContainer" + options.playerId + "\">";
+
+            //控制器左边部分，暂停、播放、停止按钮部分
+            htmlMedia += "<div class=\"MediaControllerLeft\" id=\"MediaControllerLeft" + options.playerId + "\">";
             htmlMedia += "<input type=\"button\" class=\"btnControl btnControlPauseing\" id=\"btnControlPlay" + options.playerId + "\" />";
             htmlMedia += "<input type=\"button\" class=\"btnControl btnControlStop\" id=\"btnControlStop" + options.playerId + "\" />";
-            //<!--进度条部分-->
+            htmlMedia += "</div>";
+            //控制器左边部分，暂停、播放、停止按钮部分
+
+            //进度条部分
             htmlMedia += "<div class=\"ProcessBarContainer\" id=\"ProcessBarContainer" + options.playerId + "\">";
             htmlMedia += "<div class=\"ProcessBarCommon ProcessBarLeft\" id=\"ProcessBarLeft" + options.playerId + "\"></div>";
-            htmlMedia += "<div class=\"ProcessBar\" id=\"ProcessBar" + options.playerId + "\">";
-            htmlMedia += "<div class=\"ProcessSlider\" id=\"ProcessSlider" + options.playerId + "\"></div>";
-            htmlMedia += "</div>";
+            htmlMedia += "<div class=\"ProcessBar\" id=\"ProcessBar" + options.playerId + "\"></div>";
             htmlMedia += "<div class=\"ProcessBarCommon ProcessBarRight\" id=\"ProcessBarRight" + options.playerId + "\"></div>";
+            htmlMedia += "<div class=\"ProcessBarSliderContainer\" id=\"ProcessBarSliderContainer" + options.playerId + "\"><div class=\"ProcessSlider\" id=\"ProcessSlider" + options.playerId + "\"></div></div>";
             htmlMedia += "</div>";
-            //<!--音量控制部分-->
+            //进度条部分
+
+            //控制器右边部分，音量和播放状态
+            htmlMedia += "<div class=\"MediaControllerRight\" id=\"MediaControllerRight" + options.playerId + "\">";
+            //音量控制部分
             htmlMedia += "<div class=\"VolumeControlContainer\" id=\"VolumeControlContainer" + options.playerId + "\">";
             htmlMedia += "<input type=\"button\" class=\"btnControl btnControlVolume\" id=\"btnControlVolume" + options.playerId + "\" />";
-            htmlMedia += "<div class=\"VolumeBar\" id=\"VolumeBar" + options.playerId + "\"><div class=\"VolumeSlider\" id=\"VolumeSlider" + options.playerId + "\"></div></div>";
+
+            htmlMedia += "<div class=\"VolumeBarContainer\" id=\"VolumeBarContainer" + options.playerId + "\">"
+            htmlMedia += "<div class=\"VolumeBar\" id=\"VolumeBar" + options.playerId + "\"></div>";
+            htmlMedia += "<div class=\"VolumeSliderContainer\" id=\"VolumeSliderContainer" + options.playerId + "\"><div class=\"VolumeSlider\" id=\"VolumeSlider" + options.playerId + "\"></div></div>";
             htmlMedia += "</div>";
-            //<!--状态栏-->
-            htmlMedia += "<span class=\"MediaStatus\" id=\"MediaStatus" + options.playerId + "\"></span>";
+
             htmlMedia += "</div>";
-            //<!--播放器控制部分-->
+            //状态栏
+            htmlMedia += "<div class=\"MediaStatus\" id=\"MediaStatus" + options.playerId + "\"></div>";
             htmlMedia += "</div>";
+            //控制器右边部分，音量和播放状态
+
+            htmlMedia += "</div>";
+            //播放器控制部分
+            htmlMedia += "</div>";
+
             options.parentElement.innerHTML += htmlMedia;
         }
 
@@ -92,6 +126,25 @@
                 objPlayer.stop();
             });
             setControlsVisibility(objPlayer);
+
+            $("#VolumeBarContainer" + objPlayer.options.playerId).hover(
+                function () {
+                    $("#VolumeBar" + objPlayer.options.playerId + ",#VolumeSliderContainer" + objPlayer.options.playerId + "").show();
+                },
+                function () {
+                    $("#VolumeBar" + objPlayer.options.playerId + ",#VolumeSliderContainer" + objPlayer.options.playerId + "").hide();
+                }
+            );
+            $("#VolumeSlider" + objPlayer.options.playerId).dragBySHF({
+                isLockX: true,
+                isLimit: true,
+                minTop: parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")) - parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height()),
+                maxTop: parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height()) - parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")),
+                funDraging: function () {
+                    $("#testEvent").text(objPlayer.volume(1 - (parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")) / parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height()))));
+                }
+            });
+            $("#VolumeBar" + objPlayer.options.playerId + ",#VolumeSliderContainer" + objPlayer.options.playerId + "").hide();
         }
 
         function setControlsVisibility(objPlayer) {
@@ -148,7 +201,7 @@
 
         var playerHtml5 = function (options, elePlayer) {
             var _this = this;
-            loadMediaContent(options);
+            initPlayer(options);
 
             this.getMediaElement = function () {
                 return elePlayer;
@@ -156,13 +209,14 @@
             this.ready = function (funReady) {
                 document.getElementById("MediaPlayerContainer" + options.playerId).appendChild(elePlayer);
                 elePlayer.setAttribute("width", "100%");
+                elePlayer.setAttribute("height", "100%");
                 playerLoaded(_this, funReady);
             };
         };
         var playerSilverlight = function (options) {
             var _this = this;
             var eleMedia;
-            loadMediaContent(options);
+            initPlayer(options);
 
             this.getMediaElement = function () {
                 return eleMedia;
@@ -237,6 +291,7 @@
             },
             volume: function (volume) {
                 (volume != null) && (volume != undefined) && (this.getMediaElement().volume = volume);
+                return this.getMediaElement().volume;
             },
             reload: function () {
                 this.getMediaElement().load();
@@ -315,7 +370,9 @@
                         playerId: new Date().getTime(),
                         mediaType: "audio",//媒体类型(video|audio)
                         mediaCodeType: "audio/mpeg",
-                        isShowControls: true//是否显示播放器控制按钮
+                        isShowControls: true,//是否显示播放器控制按钮
+                        width: 320,//视频的宽（不包含控制栏）
+                        height: 176//视频的高（不包含控制栏）
                     };
                     if ($("#MediaBySHFContainer" + defaults.playerId).length > 0) {
                         defaults.playerId = new Date().getTime();
@@ -328,7 +385,7 @@
         });
 
 
-        objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "video", "mediaCodeType": "video/mp4" });
+        objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "video", "mediaCodeType": "video/smp4" });
         if (objPlayer) {
             objPlayer.ready(function () {
                 objPlayer.autoplay(false);

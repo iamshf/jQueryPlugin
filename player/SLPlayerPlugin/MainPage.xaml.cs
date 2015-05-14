@@ -27,14 +27,6 @@ namespace SLPlayerPlugin
 
             dicRoutedEventHandler = new Dictionary<string, RoutedEventHandler>();
             dicEventHandler = new Dictionary<string, EventHandler>();
-
-            myPlayer.MediaOpened += myPlayer_MediaOpened;
-        }
-
-        protected void myPlayer_MediaOpened(object sender, RoutedEventArgs e)
-        {
-            text1.Text = myPlayer.CurrentState.ToString();
-//            MessageBox.Show(myPlayer.CurrentState.ToString());
         }
 
         /// <summary>
