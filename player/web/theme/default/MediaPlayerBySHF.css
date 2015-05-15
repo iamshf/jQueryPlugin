@@ -120,6 +120,8 @@
     position:absolute;
     bottom:0;
     left:0;
+    z-index:-10;
+    visibility:hidden;
 }
 .MediaBySHFContainer .VolumeBarContainer .VolumeBar
 {
@@ -131,7 +133,6 @@
     border-radius:4px;
     top:0px;
     left:10px;
-    display:block;
 }
 .MediaBySHFContainer .VolumeBarContainer .VolumeSliderContainer 
 {
@@ -140,7 +141,6 @@
     height:68px;
     top:-2px;
     left:10px;
-    display:block;
 }
 .MediaBySHFContainer .VolumeBarContainer .VolumeSliderContainer .VolumeSlider
 {

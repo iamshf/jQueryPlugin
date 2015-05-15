@@ -50,6 +50,7 @@
         }
     </script>
     <script type="text/javascript">
+        var isProcessBarDraging = false;
         function initPlayer(options) {
             loadPlayerContent(options);
             $("#MediaBySHFContainer" + options.playerId).css({
@@ -127,12 +128,18 @@
             });
             setControlsVisibility(objPlayer);
 
-            $("#VolumeBarContainer" + objPlayer.options.playerId).hover(
+            //$("#VolumeBar" + objPlayer.options.playerId + "").hide();
+            $("#btnControlVolume" + objPlayer.options.playerId).hover(
                 function () {
-                    $("#VolumeBar" + objPlayer.options.playerId + ",#VolumeSliderContainer" + objPlayer.options.playerId + "").show();
+                    $("#VolumeBarContainer" + objPlayer.options.playerId + "").css({ "z-index": "10", "visibility": "visible" });
+                    $("#VolumeBarContainer" + objPlayer.options.playerId).hover(
+                        function () { },
+                        function () {
+                            $("#VolumeBarContainer" + objPlayer.options.playerId + "").css({ "z-index": -10, "visibility": "hidden" });
+                        }
+                    );
                 },
                 function () {
-                    $("#VolumeBar" + objPlayer.options.playerId + ",#VolumeSliderContainer" + objPlayer.options.playerId + "").hide();
                 }
             );
             $("#VolumeSlider" + objPlayer.options.playerId).dragBySHF({
@@ -141,10 +148,20 @@
                 minTop: parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")) - parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height()),
                 maxTop: parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height()) - parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")),
                 funDraging: function () {
-                    $("#testEvent").text(objPlayer.volume(1 - (parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")) / parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height()))));
+                    objPlayer.volume(1 - (parseFloat($("#VolumeSlider" + objPlayer.options.playerId).css("top")) / parseFloat($("#VolumeSliderContainer" + objPlayer.options.playerId).height())));
                 }
             });
-            $("#VolumeBar" + objPlayer.options.playerId + ",#VolumeSliderContainer" + objPlayer.options.playerId + "").hide();
+            $("#ProcessSlider" + objPlayer.options.playerId).dragBySHF({
+                isLockY: true,
+                isLimit: true,
+                minLeft: 0,
+                maxLeft: function () { return parseFloat($("#ProcessBarSliderContainer" + objPlayer.options.playerId).width()); },
+                funStart: function () { isProcessBarDraging = true; },
+                funStop: function () {
+                    objPlayer.currentTime(parseFloat($("#ProcessSlider" + objPlayer.options.playerId).css("left")) / parseFloat($("#ProcessBarSliderContainer" + objPlayer.options.playerId).width()) * objPlayer.duration());
+                    isProcessBarDraging = false;
+                }
+            });
         }
 
         function setControlsVisibility(objPlayer) {
@@ -170,7 +187,7 @@
         function createEvent(objPlayer) {
             if (!window["MediaTimeUpdate" + objPlayer.options.playerId]) {
                 window["MediaTimeUpdate" + objPlayer.options.playerId] = function () {
-                    $("#ProcessSlider" + objPlayer.options.playerId).css("left", (objPlayer.currentTime() / objPlayer.duration() * 100) + "%");
+                    (!isProcessBarDraging) && $("#ProcessSlider" + objPlayer.options.playerId).css("left", (objPlayer.currentTime() / objPlayer.duration() * 100) + "%");
                 }
             }
             if (!window["MediaEnded" + objPlayer.options.playerId]) {
@@ -343,7 +360,7 @@
 
                 objPlayer.options = options;
             }
-            else if (Silverlight.isInstalled("5.0")) {
+            else if (Silverlight.isInstalled("7.0")) {
                 options.eleTagName = "object";
                 playerSilverlight.prototype = playerPrototype;
                 objPlayer = new playerSilverlight(options);
@@ -352,7 +369,7 @@
                 objPlayer.eventHandler.CurrentStateChanged = "currentStateChanged";
             }
             else {
-                alert("您的浏览器不支持播放此多媒体，请使用IE9.0以上浏览器或者安装最新版Microsoft Silverlight插件");
+                options.failed();
             }
             return objPlayer;
         }
@@ -372,7 +389,10 @@
                         mediaCodeType: "audio/mpeg",
                         isShowControls: true,//是否显示播放器控制按钮
                         width: 320,//视频的宽（不包含控制栏）
-                        height: 176//视频的高（不包含控制栏）
+                        height: 176,//视频的高（不包含控制栏）
+                        failed: function () {
+                            alert("您的浏览器不支持播放此多媒体，请使用IE9.0以上浏览器或者安装最新版Microsoft Silverlight插件");
+                        }//创建失败时的方法
                     };
                     if ($("#MediaBySHFContainer" + defaults.playerId).length > 0) {
                         defaults.playerId = new Date().getTime();
@@ -385,7 +405,7 @@
         });
 
 
-        objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "video", "mediaCodeType": "video/smp4" });
+        objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "video", "mediaCodeType": "video/4mp4" });
         if (objPlayer) {
             objPlayer.ready(function () {
                 objPlayer.autoplay(false);
