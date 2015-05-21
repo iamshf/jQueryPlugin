@@ -69,6 +69,7 @@
     <Content Include="ClientBin\SLPlayerPlugin.xap" />
     <Content Include="index.html" />
     <Content Include="mov_bbb.mp4" />
+    <Content Include="playerBySHF.js" />
     <Content Include="Silverlight.js" />
     <Content Include="SLPlayerPluginTestPage.aspx" />
     <Content Include="SLPlayerPluginTestPage.html" />
