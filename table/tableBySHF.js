@@ -94,6 +94,7 @@
 
         e.data.objTable.find(".sortDirection").html("");
         e.data.objHeader.children(".sortDirection").html(directionTag);
+        $(e.data.objTable).parent("div").parent("div").css("padding-top",$(e.data.objTable).children("thead").height());
     }
     function compare(a, b, sortSetting, direction) {
         var result;
