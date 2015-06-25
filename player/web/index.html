@@ -9,8 +9,7 @@
     <div id="testEvent">asdfasdf</div>
     <div id="playerContainer" style=""></div>
 
-    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.0.min.js"></script>
-    <!--<script type="text/javascript" src="MediaPlayerBySHF.js"></script>-->
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="../../drag/dragBySHF.js"></script>
     <script type="text/javascript" src="Silverlight.js"></script>
     <script type="text/javascript" src="playerBySHF.js"></script>
@@ -23,28 +22,5 @@
             });
         }
     </script>
-
-
-
-    <!--<script type="text/javascript">
-        var objMedia1;
-        $(function () {
-            objMedia1 = $.MediaBySHF.Create({ isShowControls: true });
-            objMedia1.Ready(function () { Ready(); })
-            function Ready() {
-                objMedia1.SetAutoPlay(false);
-                objMedia1.SetMedia("http://resource.en100.com.cn/javascript/mediabyshf/1.mp3");
-                objMedia1.AddEvent(objMedia1.EventHandler.Ended, "EndEvent", "{\"Test\":\"完成\"}");
-            }
-            $("#btnTestRemoveEvent").click(function () {
-                objMedia1.RemoveEvent(objMedia1.EventHandler.Ended, "EndEvent", "{\"Test\":\"完成\"}");
-            })
-        })
-        function EndEvent(strParams) {
-            strParams = $.parseJSON(strParams);
-            alert(strParams.Test);
-            $(".btnControlPause").removeClass("btnControlPause").addClass("btnControlPlay");
-        }
-    </script>-->
 </body>
 </html>
