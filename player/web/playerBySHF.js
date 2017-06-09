@@ -255,10 +255,11 @@
                         //注1：使用Microsoft Ajax Minifier生成min文件时会忽略后两个参数，需手动添加
                         //注2：跨域引用时无法访问到sender
                         //objMediaElement = sender.getHost().Content.HtmlPage;
-
-                        eleMedia = document.getElementById(plugIn.id).Content.SLPlayerPluginPage;
-                        //ConfigMediaPlayer(_this);
-                        playerLoaded(_this, funReady);
+                        if (plugIn) {
+                            eleMedia = document.getElementById(plugIn.id).Content.SLPlayerPluginPage;
+                            //ConfigMediaPlayer(_this);
+                            playerLoaded(_this, funReady);
+                        }
                     }
                 },
                 context: ""
@@ -283,7 +284,7 @@
         },
         stop: function () {
             var elePlayer = this.getMediaElement();
-            if (elePlayer.stop) {
+            if (this.options.eleTagName === "object") {
                 elePlayer.stop();
             }
             else {
@@ -333,8 +334,8 @@
                 }
                 else {
                     this.getMediaElement().removeEventListener(eventType, this.eventList[funName]);
-                    delete this.eventList[funName];
                 }
+                delete this.eventList[funName];
             }
         },
         showControls: function (isShow) {

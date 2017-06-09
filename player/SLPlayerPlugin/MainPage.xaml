@@ -6,7 +6,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-    <Grid x:Name="LayoutRoot" Background="Black">
+    <Grid x:Name="LayoutRoot" Background="Transparent">
         <MediaElement HorizontalAlignment="Stretch" Name="myPlayer" Margin="0,0,0,0" Stretch="UniformToFill" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>
