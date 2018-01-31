@@ -5,7 +5,7 @@
 * author:盛浩峰
 * Date: 2014-12-01
 * 修复与播放器插件不兼容的Bug
-* 使用前需先引用拖动插件：../drag/dragBySHF.min.js
+* 使用前需先引用拖动插件：../drag/dragBySHF.min.js  
 */
 
 /*添加样式，在IE9.0一下版本中需要单独引用，此处引用无效*/

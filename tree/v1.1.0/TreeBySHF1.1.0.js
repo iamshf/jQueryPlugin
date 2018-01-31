@@ -39,7 +39,8 @@ $("<link>")
         objCheckBoxSwitchFunName: new Object(), //节点CheckBox值改变时的方法
         objRadioSwitchFunName: new Object(), //节点Radio值改变时的方法
         isChangeColorOnClick: true, //点击节点时是否改变节点颜色
-        strBackgroundColor: "#FFFFFF"//树形菜单容器的背景色
+        strBackgroundColor: "#FFFFFF",//树形菜单容器的背景色
+        column:{"NODENAME":"NODENAME","NODEID":"NODEID","PID":"PID"}
     };
     var iTreeDataLength = 0; //节点总个数
     var objTempTreeData;
@@ -102,13 +103,13 @@ $("<link>")
         var htmlNodeContent = "";
         objTempTreeData = new Array();
         for (var i = 0; i < iTreeDataLength; i++) {
-            if (objDefaultSetting.objTreeData[i].PID == iPID) {
-                htmlNodeContent += "<li id=\"TreeBySHF_li_" + objDefaultSetting.objTreeData[i].NODEID + "\" nodeID=\"" + objDefaultSetting.objTreeData[i].NODEID + "\">";
+            if (objDefaultSetting.objTreeData[i][objDefaultSetting.column.PID] == iPID) {
+                htmlNodeContent += "<li id=\"TreeBySHF_li_" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\" nodeID=\"" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\">";
                 htmlNodeContent += "<div class=\"TreeBySHFNodeContainer\">";
-                htmlNodeContent += "<img style=\"background-color:" + objDefaultSetting.strBackgroundColor + "\" id=\"TreeBySHF_img_" + objDefaultSetting.objTreeData[i].NODEID + "\" src=\"" + IMAGEPATH + "YNNN.gif\" class=\"TreeBySHFIco\" />";
-                htmlNodeContent += "<input type=\"checkbox\" id=\"TreeBySHF_checkbox_" + objDefaultSetting.objTreeData[i].NODEID + "\" class=\"TreeBySHFCheckBox\" name=\"SelectedTreeCheckbox\" value=\"" + objDefaultSetting.objTreeData[i].NODEID + "\" />";
-                htmlNodeContent += "<input type=\"radio\" id=\"TreeBySHF_radiobox_" + objDefaultSetting.objTreeData[i].NODEID + "\" class=\"TreeBySHFRadio\" name=\"SelectedTreeRadio\" value=\"" + objDefaultSetting.objTreeData[i].NODEID + "\" />";
-                htmlNodeContent += "<a id=\"TreeBySHF_a_" + objDefaultSetting.objTreeData[i].NODEID + "\">" + objDefaultSetting.objTreeData[i].NODENAME + "</a>";
+                htmlNodeContent += "<img style=\"background-color:" + objDefaultSetting.strBackgroundColor + "\" id=\"TreeBySHF_img_" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\" src=\"" + IMAGEPATH + "YNNN.gif\" class=\"TreeBySHFIco\" />";
+                htmlNodeContent += "<input type=\"checkbox\" id=\"TreeBySHF_checkbox_" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\" class=\"TreeBySHFCheckBox\" name=\"SelectedTreeCheckbox\" value=\"" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\" />";
+                htmlNodeContent += "<input type=\"radio\" id=\"TreeBySHF_radiobox_" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\" class=\"TreeBySHFRadio\" name=\"SelectedTreeRadio\" value=\"" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\" />";
+                htmlNodeContent += "<a id=\"TreeBySHF_a_" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODEID] + "\">" + objDefaultSetting.objTreeData[i][objDefaultSetting.column.NODENAME] + "</a>";
                 htmlNodeContent += "</div>";
                 htmlNodeContent += "</li>";
 
@@ -149,14 +150,14 @@ $("<link>")
             }
             var isChecked = $(this).prop("checked")
             if (CascadeType == 1) {
-                SetNodeCheckBoxChangeUp(objNode.PID);
+                SetNodeCheckBoxChangeUp(objNode[objDefaultSetting.column.PID]);
             }
             else if (CascadeType == 2) {
                 SetNodeCheckBoxChangeDown(iNodeID, isChecked);
             }
             else {
                 SetNodeCheckBoxChangeDown(iNodeID, isChecked);
-                SetNodeCheckBoxChangeUp(objNode.PID);
+                SetNodeCheckBoxChangeUp(objNode[objDefaultSetting.column.PID]);
             }
         })
     }
@@ -191,7 +192,7 @@ $("<link>")
         ///<param name="objNode" type="object">节点JSON对象</param>
         $("#TreeBySHF_a_" + iNodeID).click(function () {
             $("#TreeBySHF_img_" + iNodeID).click();
-            //alert(objNode.NODENAME);
+            //alert(objNode[objDefaultSetting.column.NODENAME]);
             if (objDefaultSetting.isChangeColorOnClick) {
                 $("#TreeBySHF_ul_" + objDefaultSetting.iRootPID + " a.Selected").removeClass("Selected");
                 $(this).addClass("Selected");
