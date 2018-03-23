@@ -1,86 +1,68 @@
-﻿/*弹出来的遮罩层*/
-#DialogBySHFLayer
-{
-    position:absolute;
-    /*width:100%;
-    height:100%;*/
+﻿.dialogBySHFLayer,.dialogBySHF,.dialogBySHFContainer,.dialogBySHFContainer td{
+    margin:0;padding:0;
+    text-align:center;
+}
+.dialogBySHFLayer{
+    position:fixed;
+    background:rgb(0,0,0)\0;
+    filter:alpha(Opacity=40)\0;
+    background:rgba(0,0,0,0.4);
     left:0;
     top:0;
-    z-index:500;
-    background-color:#333333;
-    filter:alpha(Opacity=40);
-    -moz-opacity:0.4;
-    opacity: 0.4;
 }
-/*弹出的提示框*/
-#DialogBySHF
-{
-    position:absolute;
-    /*left:50%;
-    top:50%;
-    width:400px;
-    height:400px;*/
+.dialogBySHFWrapper{
+    position: fixed;
     border-radius:10px;
-    box-shadow:0 0 8px rgba(0, 0, 0, .8);
+    box-shadow:0 0 8px rgba(0, 0, 0, 0.8);
     background-color:#f2f2f2;
-    z-index:600;
 }
-#DialogBySHF #Title
-{
-    margin:0;
+.dialogBySHFContainer {
     width:100%;
-    height:35px;
-    background-color:#ffa500;
+    height:calc(100% - 40px);
+}
+.dialogBySHFContainer caption.title{
+    line-height:40px;
+    background:#ffa500;
     color:#FFFFFF;
-    font-family:微软雅黑,黑体,宋体;
-    font-weight:bold;
-    font-size:18px;
-    text-align:center;
+    font:bold 18px/40px "微软雅黑","黑体","宋体";
     cursor:move;
-    line-height:35px;
     border-radius:10px 10px 0 0;
 }
-#DialogBySHF #Close
-{
+.dialogBySHFContainer caption.title .close{
     position:absolute;
     right:7px;
     top:7px;
+    width:21px;
     height:21px;
     line-height:21px;
-    width:21px;
     cursor:pointer;
     display:block;
     border:1px solid #da8e02;
     box-shadow:0 0 4px rgba(255, 255, 255, .9);
     border-radius:5px;
 }
-#DialogBySHF #Container
-{
-    padding:0px 5px 5px 5px;
-    /*width:390px;
-    height:355px;*/
-}
-#DialogBySHF #Container table,#DialogBySHF #Container iframe
-{
+.dialogBySHFContainer td.dialogBySHF_tbody div.dialogBySHFMain{
+    padding:20px;
     width:100%;
     height:100%;
+    line-height:180%;
+    box-sizing:border-box;
+    overflow:auto;
+    text-align:left;
 }
-#DialogBySHF #Container table td
-{
-    vertical-align:middle;
+.dialogBySHFFrame{
+    width:100%;
+    height:100%;
+    border:none;
 }
-#DialogBySHF #Container table #TipLine
-{
-    padding:0 30px;
+.dialogBySHFContainer td.dialogBySHF_tfoot{
+    width:100%;
 }
-#DialogBySHF #Container table #BtnLine
+.btnDialogBySHF
 {
-    height:60px;
-    text-align:center;
-}
-#DialogBySHF #Container table #BtnLine input
-{
-    margin:6px 11px;
+    margin:10px;
+    height:29px;
+    min-width:54px;
     -moz-user-select: none;
     background-color:#F5F5F5;
     background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
@@ -95,13 +77,8 @@
     cursor:default;
     font-size:12px;
     font-weight:bold;
-    height:29px;
-    line-height:27px;
-    min-width:54px;
-    padding:0 8px;
-    text-align:center;
 }
-#DialogBySHF #Container table #BtnLine input:hover
+.btnDialogBySHF:hover
 {
     background-color: #F8F8F8;
     background-image: -moz-linear-gradient(center top , #F8F8F8, #F1F1F1);
@@ -109,7 +86,7 @@
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     color: #333333;
 }
-#DialogBySHF #Container table #BtnLine input:focus
+.btnDialogBySHF:focus
 {
     border: 1px solid #4D90FE;
     outline: medium none;

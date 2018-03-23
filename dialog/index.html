@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,maximum-scale=1.0"/>
     <meta name="keywords" content="jQuery,plugin,插件,web,前端,提示,对话框,alert,confirm,iframe,window" />
     <meta name="author" content="盛浩锋" />
     <title>jQuery弹出对话框提示控件</title>
-    <!--[if lte IE 9]>    <link rel="Stylesheet" type="text/css" href="dialogBySHF.css" />
-    <![endif]-->
+    <!--[if lte IE 9]><link rel="Stylesheet" type="text/css" href="dialogBySHF.css" /><![endif]-->
 </head>
 
 <body>
@@ -15,33 +16,48 @@
     <input type="button" value="弹出确认框" id="btnConfirm" />
     <input type="button" value="引用其他页面" id="btnDialog" />
     <input type="button" value="仅显示弹出项" id="btnShow" />
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.2.min.js"></script>
+    <input type="button" value="显示多个弹出项" id="btnShowMult" />
+    <div style="width:600px; height:1000px;">asdf</div>
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="dialogBySHF.js"></script>
     <script type="text/javascript" src="../drag/dragBySHF.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#btnAlert").click(function () {
-                $.DialogBySHF.Alert({ Width: 400, Height: 300, Title: "提示信息", Content: '你好，这是弹出提示，即JS中的alert', ConfirmFun: function () { test("确认后执行的方法"); } });
-            })
-            $("#btnConfirm").click(function () {
-                $.DialogBySHF.Confirm({ Width: 400, Height: 300, Title: "提示信息", Content: '你好，这是确认信息，类似于JS中的confirm', ConfirmFun: function () { test("确认后执行的方法"); }, CancelFun: function () { test("取消后执行的方法"); } });
-            })
-            $("#btnDialog").click(function () {
-                $.DialogBySHF.Dialog({ Width: 1024, Height: 768, Title: "搜狐网站", URL: 'http://www.sohu.com' });
-            })
-            $("#btnShow").click(function () {
-                $.DialogBySHF.ShowTip({
-                    Width: 400,
-                    Height: 300,
-                    Title: "提示信息",
-                    Content: '你好，这是确认信息，类似于JS中的confirm',
-                    CloseFun: function () { alert("关闭前显示！"); }
+        $(function(){
+            $("#btnShowMult").on("click", function(){
+                var dialog = $.dialogBySHF({"width": 800, "content": "asdfasdfasdf"});
+                var dialog2 = $.dialogBySHF({"closeFun": function(){
+                },"content":"asdfasdfa阿萨拉丁夸父级阿萨拉丁夸父级阿塞德里克放假阿里斯科大放假阿里斯科大计费拉克斯的积分阿散电流峰靠近阿萨拉丁夸父级阿速离开东京发了四块地方加拉课大赛放假阿萨拉丁夸父级阿里斯科大放假阿里斯雕刻技法阿萨拉丁夸父级阿里斯科大法加拉斯凯的讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿死等等等等的丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝"});
+                dialog.alert();
+                dialog2.alert();
+            });
+            $("#btnAlert").on("click", function(){
+                var dialog2 = $.dialogBySHF({"content": "dialog2", "title": "dialog2","cancelText": "cancel", "confirmText": "confirm", "confirmFun": function(){alert("acb");}, "cancelFun": function(){alert("def");}});
+                var dialog = $.dialogBySHF({"width": 1000, "title": "dialog", "content": "dialog", "confirmText": "confirm", "confirmFun": function(){
+                    dialog.destroy(); dialog2.confirm();
+                }, "closeFun": function(){alert("关闭前显示")}});
+                dialog.alert();
+            });
+            $("#btnConfirm").on("click", function(){
+                var dialog2 = $.dialogBySHF({"width": 800,"confirmFun": function(){
+                    alert("确认事件");dialog2.close();
+                }, "cancelFun": function(){
+                    alert("取消事件");
+                },"content":"asdfasdfa阿萨拉丁夸父级阿萨拉丁夸父级阿塞德里克放假阿里斯科大放假阿里斯科大计费拉克斯的积分阿散电流峰靠近阿萨拉丁夸父级阿速离开东京发了四块地方加拉课大赛放假阿萨拉丁夸父级阿里斯科大放假阿里斯雕刻技法阿萨拉丁夸父级阿里斯科大法加拉斯凯的讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿死等等等等的丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝"});
+                dialog2.confirm();
+            });
+            $("#btnDialog").on("click", function () {
+                var dialog = $.dialogBySHF({
+                    "width": 1024, "height": 768, "title": "搜狐网站", "content": 'https://www.bsccedu.com'
                 });
-            })
-        })
-        function test(str) {
-            alert(str);
-        }
+                dialog.dialog();
+            });
+            $("#btnShow").on("click", function(){
+                var dialog2 = $.dialogBySHF({"width": 800,"closeFun": function(){
+                    alert("关闭前事件");
+                }, "content":"asdfasdfa阿萨拉丁夸父级阿萨拉丁夸父级阿塞德里克放假阿里斯科大放假阿里斯科大计费拉克斯的积分阿散电流峰靠近阿萨拉丁夸父级阿速离开东京发了四块地方加拉课大赛放假阿萨拉丁夸父级阿里斯科大放假阿里斯雕刻技法阿萨拉丁夸父级阿里斯科大法加拉斯凯的讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解讲解苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦苦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿死等等等等的丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝丝"});
+                dialog2.prompt();
+            });
+        });
     </script>
 </body>
 </html>
