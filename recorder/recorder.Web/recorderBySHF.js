@@ -309,17 +309,20 @@
             isFunction(opts.notSupport) ? opts.notSupport() : alert("如果您使用的是IE浏览器，请安装先安装微软Silverlight插件或者使用Chrome或Firefox浏览器以支持录音功能");
     }
 
-    function recorderBySHF() { }
-    recorderBySHF.prototype = {
-        "ready": function ( opts) {
-            //recorder = this;
-            //getRecorder(opts);
-            alert("a");
-        },
+    function recorderBy() { }
+    recorderBy.prototype = {
+        //"ready": function (opts) {
+        //    //recorder = this;
+        //    //getRecorder(opts);
+        //    alert("a");
+        //},
         "create": function () {
             return _instance;
+        },
+        "ready": function () {
+            console.log("111");
         }
-    }
+    };
 
 
     //暴漏插件对象给全局对象
@@ -328,7 +331,7 @@
         //_global.recorderBySHF = function (opts) {
         //    return getRecorder(opts);
         //}        
-        _global.recorderBySHF = new recorderBySHF();;
+        _global.recorderBySHF = new recorderBy();
     }
 
     /*公共方法*/
