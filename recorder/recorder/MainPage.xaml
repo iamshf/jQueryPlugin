@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="recorderBySHF.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Background="Transparent">
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Image Source="/recorderBySHF;component/pic/Record.png" Name="imgStartRecord" Width="26" Height="26" Margin="2,2,32,2" MouseLeftButtonDown="imgStartRecord_MouseLeftButtonDown" Visibility="Collapsed"></Image>
+        <Image Source="/recorderBySHF;component/pic/Stop.png" Name="imgStopRecord" Width="26" Height="26" Margin="2,2,32,2" Visibility="Collapsed" MouseLeftButtonDown="imgStopRecord_MouseLeftButtonDown"></Image>
+        <Image Source="/recorderBySHF;component/pic/Play.png" Name="imgPlayRecord" Width="26" Height="26" Margin="32,2,2,2" MouseLeftButtonDown="imgPlayRecord_MouseLeftButtonDown" Visibility="Collapsed"></Image>
+        <Image Source="/recorderBySHF;component/pic/Pause.png" Name="imgPausePlayRecord" Width="26" Height="26" Margin="32,2,2,2" Visibility="Collapsed" MouseLeftButtonDown="imgPausePlayRecord_MouseLeftButtonDown"></Image>
+        <MediaElement Name="myPlayer" MediaEnded="myPlayer_MediaEnded" Width="60" Height="2" Margin="0,0,0,28" />
+    </Grid>
+</UserControl>
