@@ -3,7 +3,7 @@
  * version 1.0.0
  * author: 盛浩锋
  * date:2018-10-11
-*/
+ */
 ; (function () {
     var _global;
     var _instance;
@@ -26,10 +26,6 @@
         var player;
 
         _this.state = "initializing";
-        _this.ready = function (fn) {
-            isFunction(fn) && fn();
-            _this.state = "initialized";
-        }
         _this.start = function () {
             _this.stopplay();
             navigator.mediaDevices.getUserMedia({ "audio": true }).then(function (ms) {
@@ -156,49 +152,15 @@
     var recorder_silverlight = function (opts) {
         var _this = this;
         var params = extend(true, default_opts, opts);
-        var sl_plugin;
-        var id;
+        var sl_plugin = document.getElementById(params.plugInId).Content.SL_RecorderBySHF;
 
         _this.state = "initializing";
-        _this.ready = function (fn) {
-            //document.getElementById("MediaPlayerContainer" + options.playerId).innerHTML += Silverlight.createObjectEx({
-            document.body.innerHTML += Silverlight.createObjectEx({
-                source: params.path + "ClientBin/recorderBySHF.xap",
-                id: "slMedia" + Math.round(Math.random() * 100000000000),
-                properties: {
-                    width: "1px",
-                    height: "1px",
-                    version: "5.0.61118.0",
-                    background: "transparent",
-                    autoUpgrade: "true",
-                    windowless: "true",
-                    enableHtmlAccess: "true",
-                    allowHtmlPopupWindow:"true",
-                    alert: "您的电脑未安装Silverlight或者版本过低，请安装最新版本！"
-                },
-                events: {
-                    onError: onSilverlightError,
-                    onLoad: function (plugIn, userContext, sender) {
-                        //注1：使用Microsoft Ajax Minifier生成min文件时会忽略后两个参数，需手动添加
-                        //注2：跨域引用时无法访问到sender
-                        //sl_plugin = sender.getHost().Content.HtmlPage;
-                        if (plugIn) {
-                            _this.state = "initialized";
-                            sl_plugin = document.getElementById(plugIn.id).Content.SL_RecorderBySHF;
-                            id = plugIn.id;
-                            isFunction(fn) && fn();
-                        }
-                    }
-                },
-                context: ""
-            });
-        }
         _this.start = function () {
             _this.stopplay();
             if (!sl_plugin.querypermission()) {
                 var width = document.documentElement.clientWidth;
                 var height = document.documentElement.clientHeight;
-                document.getElementById(id).setAttribute("style", "width:" + width + "px;height:" + height + "px;left:0;top:0;position:absolute;z-index:1000;background:rgba(204,204,204,0.6);");
+                document.getElementById(params.plugInId).setAttribute("style", "width:" + width + "px;height:" + height + "px;left:0;top:0;position:absolute;z-index:1000;background:rgba(204,204,204,0.6);");
                 sl_plugin.requestpermission();
             }
             else {
@@ -221,6 +183,40 @@
         }
         _this.stopplay = function () {
             _this.state == "playing" && sl_plugin.stopplay();
+        }
+    }
+    function loadSilverlightPlugin(fn){
+        if (Silverlight.isInstalled()) {
+            document.body.innerHTML += Silverlight.createObjectEx({
+                source: getBasePath() + "ClientBin/recorderBySHF.xap",
+                id: "slMedia" + Math.round(Math.random() * 100000000000),
+                properties: {
+                    width: "1px",
+                    height: "1px",
+                    version: "5.0.61118.0",
+                    background: "transparent",
+                    autoUpgrade: "true",
+                    windowless: "true",
+                    enableHtmlAccess: "true",
+                    allowHtmlPopupWindow:"true",
+                    alert: "您的电脑未安装Silverlight或者版本过低，请安装最新版本！"
+                },
+                events: {
+                    onError: onSilverlightError,
+                    onLoad: function (plugIn, userContext, sender) {
+                        //注1：使用Microsoft Ajax Minifier生成min文件时会忽略后两个参数，需手动添加
+                        //注2：跨域引用时无法访问到sender
+                        //sl_plugin = sender.getHost().Content.HtmlPage;
+                        if (plugIn) {
+                            //_this.state = "initialized";
+                            //sl_plugin = document.getElementById(plugIn.id).Content.SL_RecorderBySHF;
+                            //id = plugIn.id;
+                            isFunction(fn) && fn(plugIn, userContext, sender)
+                        }
+                    }
+                },
+                context: ""
+            });
         }
     }
     function onSilverlightError(sender, args) {
@@ -259,10 +255,8 @@
     }
 
 
-
-
-    function getRecorder(opts) {
-        if (navigator.getUserMedia || (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+    function isSupportH5() {
+        if (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
             if (navigator.mediaDevices === undefined) {
                 navigator.mediaDevices = {};
             }
@@ -277,52 +271,29 @@
                     });
                 }
             }
-            _instance = new recorder_h5();
-            //return new recorder_h5(opts);
+            return true;
         }
-        else {
-            if (!_global.Silverlight) {
-                var sl_script = document.createElement("script");
-                sl_script.src = opts.path + "Silverlight.js";
-                document.body.appendChild(sl_script);
-
-                if (sl_script.readyState) {
-                    sl_script.addEventListener("readystatechange", function () {
-                        if (script.readyState == "loaded" || script.readyState == "complete") {
-                            checkSilverlight(opts);
-                        }
-                    });
-                }
-                else {
-                    sl_script.addEventListener("load", function () {
-                        checkSilverlight(opts);
-                    });
-                }
+        return false;
+    }
+    function isSupportSilverlight(fn) {
+        if (!_global.Silverlight) {
+            var sl_script = document.createElement("script");
+            sl_script.src = opts.path + "Silverlight.js";
+            document.body.appendChild(sl_script);
+            if (sl_script.readyState) {
+                sl_script.addEventListener("readystatechange", function () {
+                    if (script.readyState == "loaded" || script.readyState == "complete") {
+                        loadSilverlightPlugin(fn);
+                    }
+                });
+            }
+            else {
+                sl_script.addEventListener("load", function () {
+                    loadSilverlightPlugin(fn);
+                });
             }
         }
     }
-    function checkSilverlight(opts) {
-            if (Silverlight.isInstalled()) {
-                _instance = new recorder_silverlight(opts);
-                //return new recorder_silverlight(opts);
-            }
-            isFunction(opts.notSupport) ? opts.notSupport() : alert("如果您使用的是IE浏览器，请安装先安装微软Silverlight插件或者使用Chrome或Firefox浏览器以支持录音功能");
-    }
-
-    function recorderBy() { }
-    recorderBy.prototype = {
-        //"ready": function (opts) {
-        //    //recorder = this;
-        //    //getRecorder(opts);
-        //    alert("a");
-        //},
-        "create": function () {
-            return _instance;
-        },
-        "ready": function () {
-            console.log("111");
-        }
-    };
 
 
     //暴漏插件对象给全局对象
@@ -331,10 +302,48 @@
         //_global.recorderBySHF = function (opts) {
         //    return getRecorder(opts);
         //}        
-        _global.recorderBySHF = new recorderBy();
+        _global.recorderBySHF = (function() {
+            var _instance_name;
+            var _plugin_id;
+            return {
+                "ready": function(fn) {
+                    var _this = this;
+                    console.log("ready");
+                    if(isSupportH5()){
+                        _instance_name = recorder_h5;
+                        isFunction(fn) && fn(_this);
+                    }
+                    else {
+                        isSupportSilverlight(function(plugIn, userContext, sender) {
+                            _plugin_id = plugIn.id;
+                            _instance_name = recorder_silverlight;
+                            isFunction(fn) && fn(_this);
+                        });
+                    }
+                },
+                "create": function(opts) {
+                    console.log(getBasePath());
+                    _plugin_id && (opts.plugInId = _plugin_id);
+                    !_instance && (isFunction(opts.unSupported) ? opts.unSupported() : alert("如果您使用的是IE浏览器，请安装先安装微软Silverlight插件或者使用Chrome或Firefox浏览器以支持录音功能"));
+                    var instance = new _instance_name(opts);
+                    instance.state = "initialized";
+                    return instance;
+                }
+            }
+        }());
     }
 
     /*公共方法*/
+    function getBasePath() {
+        var scripts = document.getElementsByTagName("script");
+        for(var i = 0, l = scripts.length; i < l; i++) {
+            var script_src = scripts[i].src || "";
+            if(/recorderBySHF.js/.test(script_src)) {
+                return script_src.substring(0, script_src.lastIndexOf('/') + 1);
+            }
+        }
+        return "";
+    }
     function isObjFunc(name) {
         var toString = Object.prototype.toString
         return function () {

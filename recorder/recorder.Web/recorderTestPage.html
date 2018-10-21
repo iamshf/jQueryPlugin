@@ -80,6 +80,9 @@
     <script type="text/javascript" src="recorderBySHF.js"></script>
     <script type="text/javascript">
         window.onload = function () {
+            recorderBySHF.ready(function(K){
+                var recorder = K.create();
+            });
             //var opts = {"path": "/"};
             //recorderBySHF.ready(function ( opts) { 
             //    var recorder = this.create();
