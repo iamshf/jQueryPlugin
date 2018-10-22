@@ -10,13 +10,14 @@
     var default_opts = {
         "numberOfChannels": 2, //声道数
         "sampleRate": 44100, //采样率
-        "ready": function () { } //成功时执行的方法
+        "unSupported": function () {
+            alert("如果想使用录音功能请使用Chrome或Firefox浏览器，或使用IE浏览器并安装微软Silverlight插件")
+        }
     };
 
     //定义H5录音
-    var recorder_h5 = function (opts) {
+    var recorder_h5 = function (params) {
         var _this = this;
-        var params = extend(true, default_opts, opts);
         var buffer_size = 4096;
         var trunks;
         var audioCtx;
@@ -149,9 +150,8 @@
 
 
     //定义silverlight录音
-    var recorder_silverlight = function (opts) {
+    var recorder_silverlight = function (params) {
         var _this = this;
-        var params = extend(true, default_opts, opts);
         var sl_plugin = document.getElementById(params.plugInId).Content.SL_RecorderBySHF;
 
         _this.state = "initializing";
@@ -198,7 +198,7 @@
                     autoUpgrade: "true",
                     windowless: "true",
                     enableHtmlAccess: "true",
-                    allowHtmlPopupWindow:"true",
+                    allowHtmlPopupWindow: "true",
                     alert: "您的电脑未安装Silverlight或者版本过低，请安装最新版本！"
                 },
                 events: {
@@ -217,6 +217,9 @@
                 },
                 context: ""
             });
+        }
+        else {
+            isFunction(fn) && fn();
         }
     }
     function onSilverlightError(sender, args) {
@@ -278,7 +281,7 @@
     function isSupportSilverlight(fn) {
         if (!_global.Silverlight) {
             var sl_script = document.createElement("script");
-            sl_script.src = opts.path + "Silverlight.js";
+            sl_script.src = getBasePath() + "Silverlight.js";
             document.body.appendChild(sl_script);
             if (sl_script.readyState) {
                 sl_script.addEventListener("readystatechange", function () {
@@ -293,41 +296,46 @@
                 });
             }
         }
+        else {
+            loadSilverlightPlugin(fn);
+        }
     }
 
 
     //暴漏插件对象给全局对象
     _global = (function () { return this || (0, eval)('this'); }());
     if (!("recorderBySHF" in _global)) {
-        //_global.recorderBySHF = function (opts) {
-        //    return getRecorder(opts);
-        //}        
         _global.recorderBySHF = (function() {
             var _instance_name;
             var _plugin_id;
             return {
                 "ready": function(fn) {
                     var _this = this;
-                    console.log("ready");
                     if(isSupportH5()){
                         _instance_name = recorder_h5;
                         isFunction(fn) && fn(_this);
                     }
                     else {
                         isSupportSilverlight(function(plugIn, userContext, sender) {
-                            _plugin_id = plugIn.id;
-                            _instance_name = recorder_silverlight;
+                            if (plugIn) {
+                                _plugin_id = plugIn.id;
+                                _instance_name = recorder_silverlight;
+                            }
                             isFunction(fn) && fn(_this);
                         });
                     }
                 },
                 "create": function(opts) {
-                    console.log(getBasePath());
                     _plugin_id && (opts.plugInId = _plugin_id);
-                    !_instance && (isFunction(opts.unSupported) ? opts.unSupported() : alert("如果您使用的是IE浏览器，请安装先安装微软Silverlight插件或者使用Chrome或Firefox浏览器以支持录音功能"));
-                    var instance = new _instance_name(opts);
-                    instance.state = "initialized";
-                    return instance;
+                    var params = extend(true, default_opts, opts);
+                    if (_instance_name) {
+                        var instance = new _instance_name(params);
+                        instance.state = "initialized";
+                        return instance;
+                    }
+                    else {
+                        isFunction(opts.unSupported) ? opts.unSupported() : alert("如果您使用的是IE浏览器，请安装先安装微软Silverlight插件或者使用Chrome或Firefox浏览器以支持录音功能");
+                    }
                 }
             }
         }());
@@ -345,9 +353,9 @@
         return "";
     }
     function isObjFunc(name) {
-        var toString = Object.prototype.toString
+        var toString = Object.prototype.toString;
         return function () {
-            return toString.call(arguments[0]) === '[object ' + name + ']'
+            return toString.call(arguments[0]) === '[object ' + name + ']';
         }
     }
 

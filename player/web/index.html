@@ -10,16 +10,19 @@
     <div id="playerContainer" style=""></div>
 
     <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="../../drag/dragBySHF.js"></script>
+    <script type="text/javascript" src="http://js.bsccedu.com/drag/v1.1.1/dragBySHF.js"></script>
     <script type="text/javascript" src="Silverlight.js"></script>
     <script type="text/javascript" src="playerBySHF.js"></script>
     <script type="text/javascript">
-        objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "video", "mediaCodeType": "video/mp4" });
+        //objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "video", "mediaCodeType": "video/mp4" });
+        objPlayer = $.PlayerBySHF.create({ "parentElement": document.getElementById("playerContainer"), "mediaType": "audio", "mediaCodeType": "audio/mp5" });
         if (objPlayer) {
             objPlayer.ready(function () {
                 objPlayer.autoplay(false);
 //                objPlayer.setMedia("http://192.168.1.66/video/mov_bbb.mp4");
-                objPlayer.setMedia("http://manage1.bsccedu.com/ys.mp4");
+                //objPlayer.setMedia("http://manage1.bsccedu.com/ys.mp4");
+                objPlayer.setMedia("http://examv2.en100.com.cn/Upload/media/2017/05/20/2017052010495110855.mp3");
+                //objPlayer.setMedia("http://exam1.en100.com.cn/2017051911093122315.mp3");
             });
         }
     </script>
