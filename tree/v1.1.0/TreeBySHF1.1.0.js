@@ -9,6 +9,45 @@
 *        3、修订了方法名称以及相关作用域
 *        4、增加了设置默认颜色的选项
 */
+;(function(){
+    $(function(){
+    });
+    function extendObject(){
+        $.fn.extend(true, {
+            treeBySHF: function(opts) {
+                return new TreeBySHF(opts);
+            }
+        });
+    }
+    function setStyle(){
+        if($("#treeBySHFStyle").length == 0) {
+            var link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.type = "text/css";
+            link.href = "";
+            link.id = "treeBySHFStyle";
+            document.head.appendChild(link);
+            //$("head").append("<link rel=\"Stylesheet\" type=\"text/css\" href=\"dialogBySHF.css\" />");
+        }
+    }
+    var TreeBySHF = function(opts) {
+        var id_suffix;
+        do{
+            id_suffix = (new Date()).getTime() + parseInt(Math.random() * 10000);
+        }while($("#dialogBySHFLayer_" + id_suffix).length > 0);
+        
+        var defaults = {"width": 400, "height": 300, "title": "系统提示", "content": "", "confirmText": "确定", "cancelText": "取消","zindex": ++zindex,"id_suffix": id_suffix};
+        this.options = $.extend({}, defaults, opts);
+        initContent(this);
+    }
+}(jQuery, window));
+
+
+
+
+
+
+
 var IMAGEPATH = "http://resource.en100.com.cn/Javascript/TreeBySHF/V1.1.0/Images/";
 var STYLEPATH = "http://resource.en100.com.cn/Javascript/TreeBySHF/V1.1.0/TreeBySHF1.1.0.min.css";
 $("<link>")
