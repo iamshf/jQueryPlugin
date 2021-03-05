@@ -29,8 +29,24 @@
         _this.state = "initializing";
         _this.start = function () {
             _this.stopplay();
+            if(navigator.mediaDevices === undefined) {
+                navigator.mediaDevices = {};
+            }
+            if(navigator.mediaDevices.getUserMedia === undefined) {
+                navigator.mediaDevices.getUserMedia = (constraints) => {
+                    let getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    if(!getUserMedia) {
+                        return Promise.reject(new Error("您的浏览器不支持录音功能，请更换标准浏览器使用此功能"));
+                    }
+                    return new Promise((resolve, reject) => {
+                        getUserMedia.call(navigator, constraints, resolve, reject);
+                    });
+                }
+            }
+
             navigator.mediaDevices.getUserMedia({ "audio": true }).then(function (ms) {
-                navigator.permissions && navigator.permissions.query && navigator.permissions.query({ "name": "microphone" }).then(function (result) {
+                /*
+                navigator.permissions && navigator.permissions.query && navigator.permissions.query({name: "microphone"}).then(function (result) {
                     if (result.state == "prompt" || result.state == "denied") {
                         alert("请允许系统调用麦克风权限");
                     }
@@ -40,8 +56,10 @@
                         }
                     });
                 }, function (err) {
-                    alert("请确认已经打开系统麦克风权限，如已允许，请忽略！");
+                    console.log(err);
+                    //alert("请确认已经打开系统麦克风权限，如已允许，请忽略！");
                 });
+                */
                 media_stream = ms;
                 if (_global.AudioContext) {
                     audioCtx = new _global.AudioContext({ "smaple": params.sampleRate });
