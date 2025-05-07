@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div id="pager"></div>
+    <div id="content"></div>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="pagerBySHF.js"></script>
+    <script type="text/javascript">
+        $(function(){});
+
+        function updateIndex(start,count,funSuccess){
+            var index = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160];
+            var result = [];
+            for(var i = 0, l = index.length; i < l; i++){
+                if(index[i] > start){
+                    result.push(index[i]);
+                    if(result.length >= count){
+                        break;
+                    }
+                }
+            }
+            funSuccess(result);
+        }
+    </script>
+</body>
+</html>

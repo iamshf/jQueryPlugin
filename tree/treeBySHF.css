@@ -1,0 +1,86 @@
+﻿.TreeBySHF
+{
+    margin:0;
+    padding:0;
+	list-style:none;
+	clear:left;
+}
+.TreeBySHF ul
+{
+	margin:0 0 0 15px;
+	padding:0 0 0 15px;
+	list-style:none;
+	clear:left;
+	display:block;
+}
+.TreeBySHF li
+{
+	margin:0;
+	padding:0;
+	font-size:13px;
+	width:auto;
+	white-space:nowrap;
+	background:url(images/LineVertical.gif) repeat-y 0 0;
+}
+.TreeBySHF img, .TreeBySHF input{
+    vertical-align:bottom;
+}
+/*
+.TreeBySHFNodeContainer
+{
+    margin:0;
+    padding:0;
+    height:20px;
+    line-height:20px;
+    width:auto;
+    vertical-align:middle;
+}
+.TreeBySHFIco
+{
+    margin:0;
+    padding:0;
+    border:none;
+    float:left;
+    _float:none;
+}
+.TreeBySHFCheckBox,.TreeBySHFRadio
+{
+    margin:-3px 2px 1px 2px;
+    padding:0;
+    width:13px;
+    height:13px;
+    vertical-align:middle;
+    border:none;
+}
+.TreeBySHFNodeContainer a
+{
+    line-height:20px;
+    cursor:pointer;
+}
+.TreeBySHF li a.Selected
+{
+    color:Red;
+}
+.TreeBySHF li .Ex_Cos_Ico
+{
+    float:left;
+	cursor:pointer;
+}
+.TreeBySHF li .Node_Ico
+{
+    margin:0;
+    padding:0;
+    float:left;
+}
+.TreeBySHF li a.SelectedTreeNode
+{
+    color:Red;
+}
+.FirstNodeNoChildren
+{
+}
+.HasChildren
+{
+	background:url(./images/LineVertical.gif) repeat-y 0 0;
+}
+*/

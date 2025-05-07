@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>左值右值无限级分类树形菜单</title>
+</head>
+<body>
+    <div id="main"></div>
+    <div id="main_2"></div>
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="./treeBySHF.js"></script>
+    <script>
+        ;(function(){
+            $(function(){
+                var data = [
+                    {"id": 1, "name": "商品", "lv": 1, "rv": 26},
+                    {"id": 2, "name": "化妆品", "lv": 2, "rv": 7},
+                    {"id": 3, "name": "面霜", "lv": 3, "rv": 4},
+                    {"id": 4, "name": "面膜", "lv": 5, "rv": 6},
+                    {"id": 5, "name": "食品", "lv": 8, "rv": 9},
+                    {"id": 6, "name": "酒类", "lv": 10, "rv": 15},
+                    {"id": 7, "name": "白酒", "lv": 11, "rv": 12},
+                    {"id": 8, "name": "红酒", "lv": 13, "rv": 14},
+                    {"id": 9, "name": "服装", "lv": 16, "rv": 17},
+                    {"id": 10, "name": "家电", "lv": 18, "rv": 23},
+                    {"id": 11, "name": "冰箱", "lv": 19, "rv": 20},
+                    {"id": 12, "name": "空调", "lv": 21, "rv": 22},
+                    {"id": 13, "name": "鞋帽", "lv": 24, "rv": 25},
+                    {"id": 14, "name": "父级", "lv": 27, "rv": 28}
+                ];
+                $("#main").bindTreeBySHF({
+                    "data": data, 
+                    "check_type": 1, 
+                    "bgcolor": "#ffffff",
+                    "column": {"NODEID":"id", "NODENAME": "name", "LV": "lv", "RV": "rv"},
+                    "event_click": function(obj){
+                        alert(obj.data("item")["id"]);
+                    }
+                });
+                $("#main_2").bindTreeBySHF({
+                    "data": data, 
+                    "check_type": 1, 
+                    "checkbox_cascade": 2,
+                    "bgcolor": "#ffffff",
+                    "column": {"NODEID":"id", "NODENAME": "name", "LV": "lv", "RV": "rv"}
+                });
+            });
+        }(jQuery, window));
+    </script>
+</body>
+</html>
